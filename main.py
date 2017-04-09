@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import webbrowser
+from random import randint
+import time
 
 
 def gethtml():
@@ -14,10 +16,8 @@ def gethtml():
         c.post(url, data=login_data, headers={"Referer": "https://www.boostroyal.com/MembersArea/orders"})
         page = c.get("https://www.boostroyal.com/MembersArea/orders")
 
-
     soup = BeautifulSoup(page.content, 'html.parser')
     q = [text for text in soup.stripped_strings]
-
 
     with open('br.txt', "w") as file:
         file.write(str(q))
@@ -27,12 +27,7 @@ def openandformat():
     with open('br.txt') as data:
         # remove the not needed characters
         data_list = data.read()
-        data_list = data_list.replace("[", "")
-        data_list = data_list.replace("'", "")
-        data_list = data_list.replace(" ", "")
-        data_list = data_list.replace("[", "")
-        data_list = data_list.replace("'", "")
-        data_list = data_list.replace("|", "")
+        data_list = data_list.replace("[", "").replace("'", "").replace(" ", "").replace("'", "")
         data_list = data_list.split(",")
 
         # put the required information onto new list
@@ -40,40 +35,28 @@ def openandformat():
         end = data_list.index('©2014-2016BoostRoyal.comAllRightsReserved')
         mylist = data_list[start:end]
 
-        # get how many orders are there
-        numberoforder = 0
-        for i in mylist:
-            if len(i) == 4:
-                if i.isdigit:
-                    numberoforder += 1
+        # remove another useless element
+        mylist = [item for item in mylist if item != 'Waitingforbooster']
 
-        # remove another useless data
-        for i in range(numberoforder * 2):
-            mylist.remove('Waitingforbooster')
-        
-        #add | to every element then split them into string basod on | pos
-        for i in range(6, len(mylist), 7):
-            mylist.insert(i, "|")
-        finallist = "".join(mylist)
-        finallist = finallist.split('|')
+        # make list of lists so 1 list represents 1 order
+        number = 0
+        finallist = []
+        for i in range(6, (len(mylist) + 6), 6):
+            finallist.append(mylist[number:i])
+            number = i
 
         # check if order is good, then get it
         url = 'https://www.boostroyal.com/MembersArea/order/'
         for item in finallist:
-            if 'EUW' or 'EUNE' in item:
+            if item[3] == "NA":
+                print("Coindions are met")
                 goodurl = url
-                goodurl += item[0:4] + '/lockIn'
+                goodurl += item[0] + '/lockIn'
                 # webbrowser.open_new(goodurl)
 
-        # print(w)
-        print (finallist)
-gethtml()
-openandformat()
-
-
-# list with index of order ids
-        # indexlist = []
-        # for i in mylist:
-        #     if len(i) == 4:
-        #         if i.isdigit:
-        #             indexlist.append(mylist.index(i))
+counter = 0
+while counter <= 100:
+    gethtml()
+    openandformat()
+    counter += 1
+    time.sleep(randint(0, 5))
