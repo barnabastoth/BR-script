@@ -10,19 +10,17 @@ def gethtml():
     with requests.Session() as c:
         url = 'https://www.boostroyal.com/login'
         USERNAME = 'vigyor99@gmail.com'
-        PASSWORD = 'Projector94'
+        PASSWORD = 'getkankofaggot'
         c.get(url)
-        login_data = {"email":USERNAME, "password": PASSWORD, "_token":"G5WLdtCq7CJuarSwbyTuqjkbJpeNTzqRkGZ1bWCG"}
+        login_data = {"email": USERNAME, "password": PASSWORD, "_token": "G5WLdtCq7CJuarSwbyTuqjkbJpeNTzqRkGZ1bWCG"}
         c.post(url, data=login_data, headers={"Referer": "https://www.boostroyal.com/MembersArea/orders"})
         page = c.get("https://www.boostroyal.com/MembersArea/orders")
 
-    # extract only the text from html file
     soup = BeautifulSoup(page.content, 'html.parser')
-    onlytxt = [text for text in soup.stripped_strings]
+    q = [text for text in soup.stripped_strings]
 
-    # write it to txt
     with open('br.txt', "w") as file:
-        file.write(str(onlytxt))
+        file.write(str(q))
 
 
 def openandformat():
@@ -40,9 +38,7 @@ def openandformat():
         # remove another useless element
         mylist = [item for item in mylist if item != 'Waitingforbooster']
 
-        # if there is order with txt "gameswith" add an extra element
-        # to it's list so the number of arguments match with other orders
-        k = 0
+        # if there is order with txt "gameswith" add an extra element so the number of arguments match with other orders
         for i in range(len(mylist)):
             if "gameswith" in mylist[i]:
                 k = i
@@ -60,7 +56,6 @@ def openandformat():
         url = 'https://www.boostroyal.com/MembersArea/order/'
         for item in finallist:
             if item[3] == "NA":
-
                 print("Coindions are met")
                 goodurl = url
                 goodurl += item[0] + '/lockIn'
@@ -81,6 +76,3 @@ openandformat()
 
 # if __name__ == '__main__':
 #     main()
-
-# removes all multiply-customer duo orders, since they have less argumentum and fcks the script
-# finallist = [item for item in finallist if "gameswith" not in item[1]]
