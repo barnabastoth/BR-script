@@ -45,6 +45,9 @@ def openandformat():
             finallist.append(mylist[number:i])
             number = i
 
+        # removes all multiply-customer duo orders, since they have less argumentum and fcks the script
+        finallist = [item for item in finallist if "gameswith" not in item[1]]
+
         # check if order is good, then get it
         url = 'https://www.boostroyal.com/MembersArea/order/'
         for item in finallist:
@@ -53,16 +56,17 @@ def openandformat():
                 goodurl = url
                 goodurl += item[0] + '/lockIn'
                 # webbrowser.open_new(goodurl)
+        print(finallist)
+gethtml()
+openandformat()
+# def main():
+#     counter = 0
+#     while counter <= 100:
+#         gethtml()
+#         openandformat()
+#         counter += 1
+#         time.sleep(randint(0, 5))
 
 
-def main():
-    counter = 0
-    while counter <= 100:
-        gethtml()
-        openandformat()
-        counter += 1
-        time.sleep(randint(0, 5))
-
-
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
