@@ -16,11 +16,13 @@ def gethtml():
         c.post(url, data=login_data, headers={"Referer": "https://www.boostroyal.com/MembersArea/orders"})
         page = c.get("https://www.boostroyal.com/MembersArea/orders")
 
+    # extract only the text from html file
     soup = BeautifulSoup(page.content, 'html.parser')
-    q = [text for text in soup.stripped_strings]
+    onlytxt = [text for text in soup.stripped_strings]
 
+    # write it to txt
     with open('br.txt', "w") as file:
-        file.write(str(q))
+        file.write(str(onlytxt))
 
 
 def openandformat():
@@ -38,6 +40,15 @@ def openandformat():
         # remove another useless element
         mylist = [item for item in mylist if item != 'Waitingforbooster']
 
+        # if there is order with txt "gameswith" add an extra element
+        # to it's list so the number of arguments match with other orders
+        k = 0
+        for i in range(len(mylist)):
+            if "gameswith" in mylist[i]:
+                k = i
+        if k != 0:
+            mylist.insert(k, "dog")
+
         # make list of lists so 1 list represents 1 order
         number = 0
         finallist = []
@@ -45,18 +56,18 @@ def openandformat():
             finallist.append(mylist[number:i])
             number = i
 
-        # removes all multiply-customer duo orders, since they have less argumentum and fcks the script
-        finallist = [item for item in finallist if "gameswith" not in item[1]]
-
         # check if order is good, then get it
         url = 'https://www.boostroyal.com/MembersArea/order/'
         for item in finallist:
             if item[3] == "NA":
+
                 print("Coindions are met")
                 goodurl = url
                 goodurl += item[0] + '/lockIn'
                 # webbrowser.open_new(goodurl)
-        print(finallist)
+
+        for item in finallist:
+            print(item)
 gethtml()
 openandformat()
 # def main():
@@ -70,3 +81,6 @@ openandformat()
 
 # if __name__ == '__main__':
 #     main()
+
+# removes all multiply-customer duo orders, since they have less argumentum and fcks the script
+# finallist = [item for item in finallist if "gameswith" not in item[1]]
