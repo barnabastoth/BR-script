@@ -54,9 +54,15 @@ def openandformat():
                 goodurl += item[0] + '/lockIn'
                 # webbrowser.open_new(goodurl)
 
-counter = 0
-while counter <= 100:
-    gethtml()
-    openandformat()
-    counter += 1
-    time.sleep(randint(0, 5))
+
+def main():
+    counter = 0
+    while counter <= 100:
+        gethtml()
+        openandformat()
+        counter += 1
+        time.sleep(randint(0, 5))
+
+
+if __name__ == '__main__':
+    main()
