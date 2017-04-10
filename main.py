@@ -3,8 +3,15 @@ from bs4 import BeautifulSoup
 import webbrowser
 from random import randint
 import time
+import smtplib
 
+def send_mail():
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    msg = "csa"
+    server.login("vigyor99@gmail.com", "Projector94")
+    server.sendmail("vigyor99@gmail.com", "barnabastoth94@gmail.com", msg)
 
+send_mail()
 def gethtml():
     # logging into the site
     with requests.Session() as c:
@@ -56,9 +63,10 @@ def openandformat():
         url = 'https://www.boostroyal.com/MembersArea/order/'
         for item in finallist:
             if item[3] == "NA":
-                print("Coindions are met")
-                goodurl = url
-                goodurl += item[0] + '/lockIn'
+                if 'Platinum' in item[1]:
+                    print("Coindions are met")
+                    goodurl = url
+                    goodurl += item[0] + '/lockIn'
                 # webbrowser.open_new(goodurl)
 
         for item in finallist:
